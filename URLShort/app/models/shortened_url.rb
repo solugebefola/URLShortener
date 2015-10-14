@@ -2,7 +2,7 @@ require 'securerandom'
 
 class ShortenedUrl < ActiveRecord::Base
   include SecureRandom
-  validates :submitter_id, presence: true, uniqueness: true
+  validates :submitter_id, presence: true
 
   belongs_to(
     :submitter,
@@ -10,6 +10,20 @@ class ShortenedUrl < ActiveRecord::Base
     :foreign_key => :submitter_id,
     :primary_key => :id
     )
+
+  has_many(
+    :visits,
+    class_name: 'Visit',
+    foreign_key: :shortened_url_id,
+    primary_key: :id
+  )
+
+  has_many(
+    :visitors,
+    -> { distinct },
+    through: :visits,
+    source: :visitor
+  )
 
   def self.random_code
     random = SecureRandom.urlsafe_base64(16)
@@ -22,7 +36,25 @@ class ShortenedUrl < ActiveRecord::Base
   end
 
   def self.create_for_user_and_long_url!(user, long_url)
-    self.create!(submitter_id: user.id, long_url: long_url, short_url: random_code)
+    new_random_code = self.random_code.to_s
+    self.create!(submitter_id: user.id, long_url: long_url, short_url: new_random_code)
+
+    new_random_code
+  end
+
+  def num_clicks
+    Visit.select(:visitor_id).where("shortened_url_id = ?", self.id).count
+  end
+
+  def num_uniques
+    visitors.count
+    #Visit.select(:visitor_id).where("shortened_url_id = ?", self.id).distinct.count
+  end
+
+  def num_recent_uniques
+    # visitors.where("created_at > ?", 10.minutes.ago).count
+
+    Visit.select(:visitor_id).where("created_at > ? AND shortened_url_id = ?", 10.minutes.ago, self.id).distinct.count
   end
 
 end

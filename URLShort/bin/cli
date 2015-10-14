@@ -1,0 +1,42 @@
+require_relative '../app/models/shortened_url.rb'
+require_relative '../app/models/user.rb'
+
+def ask_for_email
+  puts "Gimme email!!!!!  USA!!!"
+  STDIN.gets.chomp
+end
+
+def ask_for_command
+  puts "visit a URL or add one? (v/a)"
+  STDIN.gets.chomp
+end
+
+def create_and_return_short_url(user)
+  puts "what is the long URL?"
+  long_url = STDIN.gets.chomp
+
+  ShortenedUrl.create_for_user_and_long_url!(user, long_url)
+end
+
+def visit_short_url
+  puts "What is the short url?"
+  user_short_url = STDIN.gets.chomp
+  user_long_url = ShortenedUrl.select(:long_url).where(short_url: user_short_url).first
+  Launchy.open( user_long_url.long_url )
+end
+
+def user_browser_visit
+  user_email = ask_for_email
+  user = User.find_by(email: user_email)
+
+  command = ask_for_command
+  case command
+  when 'v'
+    visit_short_url
+  when 'a'
+    user_short_url = create_and_return_short_url(user)
+    puts user_short_url
+  end
+end
+
+user_browser_visit
