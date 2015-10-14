@@ -84,3 +84,14 @@ SQLite3::SQLException: no such column: enrollments.user_id: SELECT "enrollments"
   [1m[35mCourse Load (0.4ms)[0m  SELECT "courses".* FROM "courses" ORDER BY "courses"."id" ASC LIMIT 1
   [1m[36mCourse Load (0.1ms)[0m  [1mSELECT "courses".* FROM "courses" ORDER BY "courses"."id" ASC LIMIT 1[0m
   [1m[35mUser Load (36.5ms)[0m  SELECT "users".* FROM "users" INNER JOIN "enrollments" ON "users"."id" = "enrollments"."student_id" WHERE "enrollments"."course_id" = ?  [["course_id", 1]]
+  [1m[36mCourse Load (0.2ms)[0m  [1mSELECT "courses".* FROM "courses" ORDER BY "courses"."id" ASC LIMIT 1[0m
+  [1m[35mCourse Load (0.2ms)[0m  SELECT "courses".* FROM "courses" ORDER BY "courses"."id" ASC LIMIT 1
+  [1m[36mUser Load (30.0ms)[0m  [1mSELECT "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT 1[0m  [["id", 5]]
+  [1m[35mCourse Load (0.2ms)[0m  SELECT "courses".* FROM "courses" ORDER BY "courses"."id" ASC LIMIT 1
+  [1m[36mCourse Load (0.3ms)[0m  [1mSELECT "courses".* FROM "courses"[0m
+  [1m[35mCourse Load (0.2ms)[0m  SELECT "courses".* FROM "courses"
+  [1m[36mCourse Load (0.2ms)[0m  [1mSELECT "courses".* FROM "courses"[0m
+  [1m[35mCourse Load (0.2ms)[0m  SELECT "courses".* FROM "courses" WHERE "courses"."id" = ? ORDER BY "courses"."id" ASC LIMIT 1  [["id", 1]]
+  [1m[36mCourse Load (0.7ms)[0m  [1mSELECT "courses".* FROM "courses" WHERE (id = 1)[0m
+  [1m[35mCourse Load (0.2ms)[0m  SELECT "courses".* FROM "courses" WHERE "courses"."id" = 1
+  [1m[36mCourse Load (0.2ms)[0m  [1mSELECT "courses".* FROM "courses" WHERE "courses"."id" = 1[0m
