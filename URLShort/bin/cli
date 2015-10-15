@@ -1,5 +1,5 @@
-require_relative '../app/models/shortened_url.rb'
-require_relative '../app/models/user.rb'
+# require_relative '../app/models/shortened_url.rb'
+# require_relative '../app/models/user.rb'
 
 def ask_for_email
   puts "Gimme email!!!!!  USA!!!"
@@ -21,8 +21,12 @@ end
 def visit_short_url
   puts "What is the short url?"
   user_short_url = STDIN.gets.chomp
-  user_long_url = ShortenedUrl.select(:long_url).where(short_url: user_short_url).first
-  Launchy.open( user_long_url.long_url )
+  new_url = ShortenedUrl
+    .where(short_url: user_short_url)
+    .first
+
+  Launchy.open( new_url.long_url )
+  new_url
 end
 
 def user_browser_visit
@@ -32,7 +36,8 @@ def user_browser_visit
   command = ask_for_command
   case command
   when 'v'
-    visit_short_url
+    short_url = visit_short_url
+    Visit.record_visit!(user, short_url)
   when 'a'
     user_short_url = create_and_return_short_url(user)
     puts user_short_url
